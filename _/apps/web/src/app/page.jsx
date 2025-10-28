@@ -1,102 +1,213 @@
-import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect } from "react";
 import useUser from "@/utils/useUser";
-import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
-import SavingsChart from "@/components/SavingsChart";
-import TransactionsList from "@/components/TransactionsList";
 
-export default function HomePage() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data: user, loading: userLoading } = useUser();
+function MainComponent() {
+  const { data: user, loading } = useUser();
 
-  // Redirect to sign-in if not authenticated
   useEffect(() => {
-    if (!userLoading && !user) {
-      window.location.href = "/account/signin";
+    if (!loading) {
+      if (user) {
+        // User is authenticated, redirect to dashboard
+        window.location.href = "/dashboard";
+      } else {
+        // User is not authenticated, show landing page
+      }
     }
-  }, [user, userLoading]);
+  }, [user, loading]);
 
-  if (userLoading) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-[#F9FAFB] dark:bg-[#0F172A] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#4F46E5]"></div>
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-50 to-cyan-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
 
-  if (!user) {
-    return null;
+  // If user is authenticated, show loading while redirecting
+  if (user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-50 to-cyan-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] dark:bg-[#0F172A] flex">
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+      {/* Hero Section */}
+      <div className="px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          {/* MoneyFlow Logo */}
+          <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-600 to-indigo-700 shadow-lg">
+            <span className="text-3xl font-bold text-white">$</span>
+          </div>
 
-      {/* Sidebar - Responsive flexbox item */}
-      <div
-        className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-[#1E293B] border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0 lg:relative lg:flex-shrink-0
-      `}
-      >
-        <Sidebar onClose={() => setSidebarOpen(false)} />
-      </div>
+          <h1 className="mb-6 text-5xl font-bold text-gray-900 sm:text-6xl lg:text-7xl">
+            Money<span className="text-indigo-600">Flow</span>
+          </h1>
 
-      {/* Main content area - Flexbox container */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile menu button */}
-        <div className="lg:hidden">
-          <div className="flex items-center justify-between p-4 bg-white dark:bg-[#1E293B] border-b border-gray-200 dark:border-gray-700">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#4F46E5] dark:focus:ring-[#4F46E5] transition-colors duration-150"
+          <p className="mb-8 text-xl text-gray-600 sm:text-2xl">
+            Take control of your finances with smart tracking, insightful
+            analytics, and powerful savings tools.
+          </p>
+
+          <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <a
+              href="/account/signup"
+              className="rounded-xl bg-indigo-600 px-8 py-4 text-lg font-medium text-white transition-all hover:bg-indigo-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
             >
-              <Menu className="h-6 w-6" />
-            </button>
-            {/* Mobile logo */}
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-[#4F46E5] dark:bg-[#4F46E5] rounded flex items-center justify-center">
-                <span className="text-white font-bold text-sm">MF</span>
-              </div>
-              <div className="ml-2 flex items-center">
-                <span className="text-[#1F2937] dark:text-white font-medium text-lg">
-                  Money
-                </span>
-                <span className="text-[#4F46E5] dark:text-[#22D3EE] font-medium text-lg">
-                  Flow
-                </span>
-              </div>
-            </div>
-            <div className="w-10" /> {/* Spacer for centering */}
-          </div>
-        </div>
-
-        {/* Header - Always visible on desktop, hidden on mobile - Now sticky */}
-        <div className="hidden lg:block flex-shrink-0 sticky top-0 z-30">
-          <Header />
-        </div>
-
-        {/* Main Content - Flexible scrollable area */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-3 lg:p-4">
-            {/* Savings Chart Section */}
-            <div className="mb-4">
-              <SavingsChart />
-            </div>
-
-            {/* Transactions List Section */}
-            <TransactionsList />
+              Get Started Free
+            </a>
+            <a
+              href="/account/signin"
+              className="rounded-xl border border-gray-300 bg-white px-8 py-4 text-lg font-medium text-gray-700 transition-all hover:bg-gray-50 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+            >
+              Sign In
+            </a>
           </div>
         </div>
       </div>
+
+      {/* Features Section */}
+      <div className="px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid gap-8 md:grid-cols-3">
+            {/* Feature 1 */}
+            <div className="rounded-2xl bg-white p-8 shadow-lg">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-100 to-indigo-200">
+                <svg
+                  className="h-6 w-6 text-indigo-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
+                </svg>
+              </div>
+              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                Smart Tracking
+              </h3>
+              <p className="text-gray-600">
+                Automatically categorize expenses and track your income with
+                intelligent insights.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="rounded-2xl bg-white p-8 shadow-lg">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-100 to-cyan-200">
+                <svg
+                  className="h-6 w-6 text-cyan-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                  />
+                </svg>
+              </div>
+              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                Savings Goals
+              </h3>
+              <p className="text-gray-600">
+                Set and achieve your financial goals with visual progress
+                tracking and smart recommendations.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="rounded-2xl bg-white p-8 shadow-lg">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-green-100 to-green-200">
+                <svg
+                  className="h-6 w-6 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  />
+                </svg>
+              </div>
+              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                Budget Control
+              </h3>
+              <p className="text-gray-600">
+                Create personalized budgets and receive alerts to stay on track
+                with your spending.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Section */}
+      <div className="px-4 py-16 bg-gradient-to-r from-indigo-600 to-cyan-600">
+        <div className="mx-auto max-w-6xl text-center">
+          <h2 className="mb-12 text-3xl font-bold text-white sm:text-4xl">
+            Trusted by Smart Savers
+          </h2>
+          <div className="grid gap-8 sm:grid-cols-3">
+            <div>
+              <div className="mb-2 text-4xl font-bold text-white">$2.5M+</div>
+              <div className="text-indigo-100">Total Savings Tracked</div>
+            </div>
+            <div>
+              <div className="mb-2 text-4xl font-bold text-white">50K+</div>
+              <div className="text-indigo-100">Active Users</div>
+            </div>
+            <div>
+              <div className="mb-2 text-4xl font-bold text-white">95%</div>
+              <div className="text-indigo-100">Goal Achievement Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
+            Start Your Financial Journey Today
+          </h2>
+          <p className="mb-8 text-xl text-gray-600">
+            Join thousands of users who have taken control of their finances
+            with MoneyFlow.
+          </p>
+          <a
+            href="/account/signup"
+            className="inline-block rounded-xl bg-indigo-600 px-8 py-4 text-lg font-medium text-white transition-all hover:bg-indigo-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+          >
+            Create Free Account
+          </a>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 bg-white px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl text-center">
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-700 mx-auto">
+            <span className="text-lg font-bold text-white">$</span>
+          </div>
+          <p className="text-gray-600">
+            © 2025 MoneyFlow. Take control of your financial future.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
+
+export default MainComponent;

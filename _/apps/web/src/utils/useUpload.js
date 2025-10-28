@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 function useUpload() {
   const [loading, setLoading] = React.useState(false);
@@ -11,31 +11,31 @@ function useUpload() {
         formData.append("file", input.file);
         response = await fetch("/_create/api/upload/", {
           method: "POST",
-          body: formData
+          body: formData,
         });
       } else if ("url" in input) {
         response = await fetch("/_create/api/upload/", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ url: input.url })
+          body: JSON.stringify({ url: input.url }),
         });
       } else if ("base64" in input) {
         response = await fetch("/_create/api/upload/", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ base64: input.base64 })
+          body: JSON.stringify({ base64: input.base64 }),
         });
       } else {
         response = await fetch("/_create/api/upload/", {
           method: "POST",
           headers: {
-            "Content-Type": "application/octet-stream"
+            "Content-Type": "application/octet-stream",
           },
-          body: input.buffer
+          body: input.buffer,
         });
       }
       if (!response.ok) {

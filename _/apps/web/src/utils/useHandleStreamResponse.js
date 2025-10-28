@@ -1,9 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-function useHandleStreamResponse({
-  onChunk,
-  onFinish
-}) {
+function useHandleStreamResponse({ onChunk, onFinish }) {
   const handleStreamResponse = React.useCallback(
     async (response) => {
       if (response.body) {
@@ -24,13 +21,16 @@ function useHandleStreamResponse({
         }
       }
     },
-    [onChunk, onFinish]
+    [onChunk, onFinish],
   );
   const handleStreamResponseRef = React.useRef(handleStreamResponse);
   React.useEffect(() => {
     handleStreamResponseRef.current = handleStreamResponse;
   }, [handleStreamResponse]);
-  return React.useCallback((response) => handleStreamResponseRef.current(response), []); 
+  return React.useCallback(
+    (response) => handleStreamResponseRef.current(response),
+    [],
+  );
 }
 
 export default useHandleStreamResponse;

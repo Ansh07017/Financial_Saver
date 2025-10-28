@@ -1,12 +1,15 @@
-
-import React, { useRef, useEffect } from 'react';
-import { Platform, Keyboard, KeyboardAvoidingView } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import React, { useRef, useEffect } from "react";
+import { Platform, Keyboard, KeyboardAvoidingView } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 const KeyboardAvoidingAnimatedView = (props, ref) => {
   const {
     children,
-    behavior = Platform.OS === 'ios' ? 'padding' : 'height',
+    behavior = Platform.OS === "ios" ? "padding" : "height",
     keyboardVerticalOffset = 0,
     style,
     contentContainerStyle,
@@ -46,23 +49,23 @@ const KeyboardAvoidingAnimatedView = (props, ref) => {
       bottomRef.current = 0;
     };
 
-    Keyboard.addListener('keyboardWillShow', onKeyboardShow);
-    Keyboard.addListener('keyboardWillHide', onKeyboardHide);
+    Keyboard.addListener("keyboardWillShow", onKeyboardShow);
+    Keyboard.addListener("keyboardWillHide", onKeyboardHide);
 
     return () => {
-      Keyboard.removeAllListeners('keyboardWillShow');
-      Keyboard.removeAllListeners('keyboardWillHide');
+      Keyboard.removeAllListeners("keyboardWillShow");
+      Keyboard.removeAllListeners("keyboardWillHide");
     };
   }, [keyboardVerticalOffset, enabled, bottomHeight]);
 
   const animatedStyle = useAnimatedStyle(() => {
-    if (behavior === 'height') {
+    if (behavior === "height") {
       return {
         height: initialHeightRef.current - bottomHeight.value,
         flex: bottomHeight.value > 0 ? 0 : null,
       };
     }
-    if (behavior === 'padding') {
+    if (behavior === "padding") {
       return {
         paddingBottom: bottomHeight.value,
       };
@@ -89,14 +92,9 @@ const KeyboardAvoidingAnimatedView = (props, ref) => {
   };
 
   const renderContent = () => {
-    if (behavior === 'position') {
+    if (behavior === "position") {
       return (
-        <Animated.View
-          style={[
-            contentContainerStyle,
-            positionAnimatedStyle,
-          ]}
-        >
+        <Animated.View style={[contentContainerStyle, positionAnimatedStyle]}>
           {children}
         </Animated.View>
       );
@@ -106,7 +104,7 @@ const KeyboardAvoidingAnimatedView = (props, ref) => {
   };
 
   // for web, default to unused keyboard avoiding view
-  if (Platform.OS === 'web') {
+  if (Platform.OS === "web") {
     return (
       <KeyboardAvoidingView
         behavior={behavior}
@@ -131,6 +129,6 @@ const KeyboardAvoidingAnimatedView = (props, ref) => {
   );
 };
 
-KeyboardAvoidingAnimatedView.displayName = 'KeyboardAvoidingAnimatedView';
+KeyboardAvoidingAnimatedView.displayName = "KeyboardAvoidingAnimatedView";
 
 export default KeyboardAvoidingAnimatedView;

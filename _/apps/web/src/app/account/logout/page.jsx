@@ -1,66 +1,43 @@
 import useAuth from "@/utils/useAuth";
-import { DollarSign, LogOut, ArrowLeft } from "lucide-react";
 
 function MainComponent() {
   const { signOut } = useAuth();
-  
+
   const handleSignOut = async () => {
     await signOut({
-      callbackUrl: "/account/signin",
+      callbackUrl: "/",
       redirect: true,
     });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-800 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
-        <div className="p-8">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-                <DollarSign className="w-8 h-8 text-white" />
-              </div>
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">MoneyFlow</h1>
-            <p className="text-gray-600">Smart Finance Tracker</p>
+    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-indigo-50 to-cyan-50 p-4">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
+        {/* MoneyFlow Logo */}
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-700">
+            <span className="text-2xl font-bold text-white">$</span>
           </div>
+          <h1 className="text-3xl font-bold text-gray-800">Sign Out</h1>
+          <p className="text-gray-600">
+            Are you sure you want to sign out of MoneyFlow?
+          </p>
+        </div>
 
-          {/* Logout Content */}
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <LogOut className="w-8 h-8 text-red-600" />
-            </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Sign Out</h2>
-            <p className="text-gray-600">
-              Are you sure you want to sign out of your account?
-            </p>
-          </div>
+        <div className="space-y-4">
+          <button
+            onClick={handleSignOut}
+            className="w-full rounded-lg bg-indigo-600 px-4 py-3 text-base font-medium text-white transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+          >
+            Yes, Sign Out
+          </button>
 
-          {/* Actions */}
-          <div className="space-y-3">
-            <button
-              onClick={handleSignOut}
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
-            >
-              <LogOut className="w-5 h-5" />
-              <span>Sign Out</span>
-            </button>
-
-            <button
-              onClick={() => window.history.back()}
-              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Go Back</span>
-            </button>
-          </div>
-
-          <div className="text-center mt-6">
-            <p className="text-sm text-gray-500">
-              Your data will be safely stored and available when you sign back in.
-            </p>
-          </div>
+          <a
+            href="/dashboard"
+            className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-base font-medium text-gray-700 text-center transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+          >
+            Cancel
+          </a>
         </div>
       </div>
     </div>

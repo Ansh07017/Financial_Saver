@@ -1,6 +1,8 @@
-import * as React from 'react';
-import { UploadClient } from '@uploadcare/upload-client'
-const client = new UploadClient({ publicKey: process.env.EXPO_PUBLIC_UPLOADCARE_PUBLIC_KEY });
+import * as React from "react";
+import { UploadClient } from "@uploadcare/upload-client";
+const client = new UploadClient({
+  publicKey: process.env.EXPO_PUBLIC_UPLOADCARE_PUBLIC_KEY,
+});
 
 function useUpload() {
   const [loading, setLoading] = React.useState(false);
@@ -31,33 +33,36 @@ function useUpload() {
             fileName: asset.name ?? asset.uri.split("/").pop(),
             contentType: asset.mimeType,
             secureSignature,
-            secureExpire
+            secureExpire,
           });
-          return { url: `${process.env.EXPO_PUBLIC_BASE_CREATE_USER_CONTENT_URL}/${result.uuid}/`, mimeType: result.mimeType || null };
+          return {
+            url: `${process.env.EXPO_PUBLIC_BASE_CREATE_USER_CONTENT_URL}/${result.uuid}/`,
+            mimeType: result.mimeType || null,
+          };
         }
       } else if ("url" in input) {
         response = await fetch("/_create/api/upload/", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ url: input.url })
+          body: JSON.stringify({ url: input.url }),
         });
       } else if ("base64" in input) {
         response = await fetch("/_create/api/upload/", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ base64: input.base64 })
+          body: JSON.stringify({ base64: input.base64 }),
         });
       } else {
         response = await fetch("/_create/api/upload/", {
           method: "POST",
           headers: {
-            "Content-Type": "application/octet-stream"
+            "Content-Type": "application/octet-stream",
           },
-          body: input.buffer
+          body: input.buffer,
         });
       }
       if (!response.ok) {

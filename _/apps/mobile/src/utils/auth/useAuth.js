@@ -1,10 +1,9 @@
-import { router } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
-import { useCallback, useEffect, useMemo } from 'react';
-import { create } from 'zustand';
-import { Modal, View } from 'react-native';
-import { useAuthModal, useAuthStore, authKey } from './store';
-
+import { router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import { useCallback, useEffect, useMemo } from "react";
+import { create } from "zustand";
+import { Modal, View } from "react-native";
+import { useAuthModal, useAuthStore, authKey } from "./store";
 
 /**
  * This hook provides authentication functionality.
@@ -28,10 +27,10 @@ export const useAuth = () => {
   useEffect(() => {}, []);
 
   const signIn = useCallback(() => {
-    open({ mode: 'signin' });
+    open({ mode: "signin" });
   }, [open]);
   const signUp = useCallback(() => {
-    open({ mode: 'signup' });
+    open({ mode: "signup" });
   }, [open]);
 
   const signOut = useCallback(() => {
